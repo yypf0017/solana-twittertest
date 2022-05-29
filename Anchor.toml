@@ -12,7 +12,7 @@ url = "https://anchor.projectserum.com"
 
 [provider]
 cluster = "devnet"
-wallet = "/home/ssm-user/.config/solana/id.json"
+wallet = "/home/ssm-user/.config/solana/anchor.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
