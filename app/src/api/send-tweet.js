@@ -18,7 +18,7 @@ export const sendTweet = async (topic, content) => {
 
     const tweetAccount = await program.value.account.tweet.fetch(tweet.publicKey)
     if(tweetAccount){
-        tokentransfer(wallet.value.publicKey,1)
+        tokentransfer(wallet.value.publicKey,0.1)
     }
     return new Tweet(tweet.publicKey, tweetAccount)
 }
