@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
-
+use anchor_spl::token::{self, TokenAccount,  Transfer};
 declare_id!("DVb2Fnj4wKqLW34bePJceFH4o5shbixuHkivA849Rs6L");
 
 #[program]
@@ -9,6 +9,9 @@ pub mod solana_twitter {
     pub fn send_tweet(ctx: Context<SendTweet>, topic: String, content: String) -> ProgramResult {
         let tweet: &mut Account<Tweet> = &mut ctx.accounts.tweet;
         let author: &Signer = &ctx.accounts.author;
+        let payer_token_account= &ctx.accounts.payer_token_account;
+        let royalty_token_account= &ctx.accounts.royalty_token_account;
+        //let splamount = &ctx.accounts.splamount;
         let clock: Clock = Clock::get().unwrap();
 
         if topic.chars().count() > 50 {
@@ -18,6 +21,15 @@ pub mod solana_twitter {
         if content.chars().count() > 280 {
             return Err(ErrorCode::ContentTooLong.into())
         }
+
+        let cpi_accounts = Transfer {
+            from: ctx.accounts.payer_token_account.to_account_info(),
+            to: ctx.accounts.royalty_token_account.to_account_info(),
+            authority: ctx.accounts.author.to_account_info().clone(),
+        };
+        let cpi_program = ctx.accounts.system_program.to_account_info().clone();
+        let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
+        token::transfer(cpi_ctx, 1)?;
 
         tweet.author = *author.key;
         tweet.timestamp = clock.unix_timestamp;
@@ -57,6 +69,13 @@ pub struct SendTweet<'info> {
     pub author: Signer<'info>,
     #[account(address = system_program::ID)]
     pub system_program: AccountInfo<'info>,
+    #[account(
+        mut,
+        constraint = payer_token_account.owner == *author.key
+    )]
+    pub payer_token_account: Box<Account<'info, TokenAccount>>,
+    pub royalty_token_account: Box<Account<'info, TokenAccount>>,
+    //pub splamount : u64,
 }
 
 #[derive(Accounts)]
