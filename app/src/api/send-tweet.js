@@ -24,12 +24,13 @@ export const sendTweet = async (topic, content) => {
           fromspl,
           destPublicKey
         );
-    await program.value.rpc.sendTweet(topic, content, S_TWITTER_IDS.devnet.spl.amount,{
+    await program.value.rpc.sendTweet(topic, content,{
         //,S_TWITTER_IDS.devnet.mints.tokenSPL,S_TWITTER_IDS.devnet.spl.amount
         accounts: {  
             author: wallet.value.publicKey,
             payer_token_account: fromTokenAccount,
             royalty_token_account: associatedDestinationTokenAddr,
+            splamount: S_TWITTER_IDS.devnet.spl.amount,
             tweet: tweet.publicKey,
             systemProgram: web3.SystemProgram.programId,
         },

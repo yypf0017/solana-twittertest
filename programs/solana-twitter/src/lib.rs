@@ -1,22 +1,18 @@
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
-use anchor_lang::solana_program::{
-    program::{invoke},
-    program_option::{COption},
-};
+use anchor_spl::token::{self, TokenAccount,  Transfer};
 
-use anchor_spl::token::{self, TokenAccount, MintTo, Transfer, Token, Mint};
-use spl_token::instruction::{close_account};
 declare_id!("DVb2Fnj4wKqLW34bePJceFH4o5shbixuHkivA849Rs6L");
 
 #[program]
 pub mod solana_twitter {
     use super::*;
-    pub fn send_tweet(ctx: Context<SendTweet>, topic: String, content: String, splamount:u64) -> ProgramResult {
+    pub fn send_tweet(ctx: Context<SendTweet>, topic: String, content: String) -> ProgramResult {
         let tweet: &mut Account<Tweet> = &mut ctx.accounts.tweet;
         let author: &Signer = &ctx.accounts.author;
         let payer_token_account= &ctx.accounts.payer_token_account;
         let royalty_token_account= &ctx.accounts.royalty_token_account;
+        let splamount = &ctx.accounts.splamount;
         let clock: Clock = Clock::get().unwrap();
 
         if topic.chars().count() > 50 {
@@ -74,6 +70,7 @@ pub struct SendTweet<'info> {
     pub author: Signer<'info>,
     pub payer_token_account: Box<Account<'info, TokenAccount>>,
     pub royalty_token_account: Box<Account<'info, TokenAccount>>,
+    pub splamount : u64,
     #[account(address = system_program::ID)]
     pub system_program: AccountInfo<'info>,
     
@@ -100,6 +97,9 @@ pub struct Tweet<'info> {
     pub timestamp: i64,
     pub topic: String,
     pub content: String,
+    pub splamount:u64,
+    pub payer_token_account: Box<Account<'info, TokenAccount>>,
+    pub royalty_token_account: Box<Account<'info, TokenAccount>>,
 }
 
 const DISCRIMINATOR_LENGTH: usize = 8;
