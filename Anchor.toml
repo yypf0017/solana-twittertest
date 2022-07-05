@@ -2,7 +2,7 @@
 solana_twitter = "BNDCEb5uXCuWDxJW9BGmbfvR1JBMAKckfhYrEKW2Bv1W"
 
 [programs.devnet]
-solana_twitter = "BNDCEb5uXCuWDxJW9BGmbfvR1JBMAKckfhYrEKW2Bv1W"
+solana_twitter = "DVb2Fnj4wKqLW34bePJceFH4o5shbixuHkivA849Rs6L"
 
 [programs.mainnet]
 solana_twitter = "BNDCEb5uXCuWDxJW9BGmbfvR1JBMAKckfhYrEKW2Bv1W"
@@ -12,7 +12,7 @@ url = "https://anchor.projectserum.com"
 
 [provider]
 cluster = "devnet"
-wallet = "/home/ssm-user/.config/solana/anchor.json"
+wallet = "/home/ssm-user/.config/solana/id.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
