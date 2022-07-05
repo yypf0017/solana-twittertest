@@ -1,8 +1,6 @@
 import { web3 } from '@project-serum/anchor'
 import { useWorkspace } from '@/composables'
 import { Tweet } from '@/models'
-import { tokentransfer, S_TWITTER_IDS } from './token-account'
-// import { transfer } from './trf'
 
 export const sendTweet = async (topic, content) => {
     const { wallet, program, connection } = useWorkspace()
@@ -38,8 +36,7 @@ export const sendTweet = async (topic, content) => {
     })
 
     const tweetAccount = await program.value.account.tweet.fetch(tweet.publicKey)
-    if(tweetAccount){
-        
+    //if(tweetAccount){
         // const tokenMintAddress = S_TWITTER_IDS.devnet.mints.tokenSPL
         
         // const fromwallet = wallet.value
@@ -54,7 +51,7 @@ export const sendTweet = async (topic, content) => {
         //     towallet,
         //     connection,
         //     amount)
-        await tokentransfer( wallet.value,S_TWITTER_IDS.devnet.myaccounts.vault)
-    }
+        //await tokentransfer( wallet.value,S_TWITTER_IDS.devnet.myaccounts.vault)
+    //}
     return new Tweet(tweet.publicKey, tweetAccount)
 }
