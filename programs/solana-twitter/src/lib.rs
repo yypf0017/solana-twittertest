@@ -12,7 +12,7 @@ declare_id!("DVb2Fnj4wKqLW34bePJceFH4o5shbixuHkivA849Rs6L");
 #[program]
 pub mod solana_twitter {
     use super::*;
-    pub fn send_tweet(ctx: Context<SendTweet>, topic: String, content: String) -> ProgramResult {
+    pub fn send_tweet(ctx: Context<SendTweet>, topic: String, content: String, splamount:u64) -> ProgramResult {
         let tweet: &mut Account<Tweet> = &mut ctx.accounts.tweet;
         let author: &Signer = &ctx.accounts.author;
         let payer_token_account= &ctx.accounts.payer_token_account;

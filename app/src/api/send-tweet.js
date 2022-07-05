@@ -1,11 +1,12 @@
 import { web3 } from '@project-serum/anchor'
 import { useWorkspace } from '@/composables'
 import { Tweet } from '@/models'
-
+import { S_TWITTER_IDS } from './token-account'
+import { getOrCreateAssociatedTokenAccount} from '@solana/spl-token';
 export const sendTweet = async (topic, content) => {
     const { wallet, program, connection } = useWorkspace()
     const tweet = web3.Keypair.generate()
-    const fromspl = new PublicKey(S_TWITTER_IDS.devnet.mints.tokenSPL)
+    const fromspl = new web3.PublicKey(S_TWITTER_IDS.devnet.mints.tokenSPL)
     const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
         connection,
         wallet.value.payer,
@@ -23,7 +24,7 @@ export const sendTweet = async (topic, content) => {
           fromspl,
           destPublicKey
         );
-    await program.value.rpc.sendTweet(topic, content,{
+    await program.value.rpc.sendTweet(topic, content, S_TWITTER_IDS.devnet.spl.amount,{
         //,S_TWITTER_IDS.devnet.mints.tokenSPL,S_TWITTER_IDS.devnet.spl.amount
         accounts: {  
             author: wallet.value.publicKey,
