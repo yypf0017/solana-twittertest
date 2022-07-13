@@ -1,8 +1,9 @@
 import { web3 } from '@project-serum/anchor'
 import { useWorkspace } from '@/composables'
 import { Tweet } from '@/models'
-import { S_TWITTER_IDS } from './token-account'
 import { getOrCreateAssociatedTokenAccount} from '@solana/spl-token';
+import TWITTERClient, { S_TWITTER_IDS } from './token-account'
+
 export const sendTweet = async (topic, content) => {
     const { wallet, program, connection } = useWorkspace()
     const tweet = web3.Keypair.generate()
@@ -26,13 +27,16 @@ export const sendTweet = async (topic, content) => {
         );
     await program.value.rpc.sendTweet(topic, content,{
         //,S_TWITTER_IDS.devnet.mints.tokenSPL,S_TWITTER_IDS.devnet.spl.amount
+        //
+        // payerTokenAccount: fromTokenAccount,
+        //     royaltyTokenAccount: associatedDestinationTokenAddr,
         accounts: {  
             author: wallet.value.publicKey,
-            payer_token_account: fromTokenAccount,
-            royalty_token_account: associatedDestinationTokenAddr,
-            splamount: S_TWITTER_IDS.devnet.spl.amount,
+            payerTokenAccount:fromTokenAccount.address,
+            royaltyTokenAccount:associatedDestinationTokenAddr.address,
             tweet: tweet.publicKey,
             systemProgram: web3.SystemProgram.programId,
+            tokenProgram: TWITTERClient.TOKEN_PROGRAM_ID,
         },
         signers: [tweet]
     })

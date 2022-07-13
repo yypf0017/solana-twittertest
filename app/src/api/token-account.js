@@ -1,8 +1,10 @@
-import { getOrCreateAssociatedTokenAccount , transfer } from '@solana/spl-token';
+//import { getOrCreateAssociatedTokenAccount , transfer } from '@solana/spl-token';
 // import { web3 } from '@project-serum/anchor'
-import {clusterApiUrl, Connection ,PublicKey,Keypair } from "@solana/web3.js";
+//import {clusterApiUrl, Connection ,PublicKey,Keypair } from "@solana/web3.js";
 import { createMint, getOrCreateAssociatedTokenAccount, mintTo, transfer } from '@solana/spl-token';
 import { web3 } from '@project-serum/anchor'
+import * as anchor from '@project-serum/anchor'
+import { TokenInstructions } from '@project-serum/serum'
 
 export const createMintInit = async () => { 
   const payer = web3.Keypair.generate();
@@ -59,7 +61,13 @@ export const createMintInit = async () => {
   )
   return tokenAccount.address;
 }
+export default class TWITTERClient {
 
+static TOKEN_PROGRAM_ID = new anchor.web3.PublicKey(
+  TokenInstructions.TOKEN_PROGRAM_ID.toString()
+)
+
+}
 export const S_TWITTER_IDS = {
   mainnet: {
     programs: {
